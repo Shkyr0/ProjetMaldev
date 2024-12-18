@@ -34,10 +34,11 @@ BOOL InjectShellcode(LPVOID payload, SIZE_T payloadSize, DWORD processId) {
         return FALSE;
     }
 
+    // Libérer les espaces mémoires 
     WaitForSingleObject(hThread, INFINITE);
-    //VirtualFreeEx(hProcess, remoteMemory, 0, MEM_RELEASE);
-    //CloseHandle(hThread);
-    //CloseHandle(hProcess);
+    VirtualFreeEx(hProcess, remoteMemory, 0, MEM_RELEASE);
+    CloseHandle(hThread);
+    CloseHandle(hProcess);
 
     return TRUE;
 }

