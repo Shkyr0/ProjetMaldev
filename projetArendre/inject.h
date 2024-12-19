@@ -3,6 +3,8 @@
 
 #include <windows.h>
 
-BOOL InjectShellcode(LPVOID payload, SIZE_T payloadSize, DWORD processId);
+BOOL InjectShellcode(LPVOID payload, SIZE_T payloadSize, DWORD processId, void* allocatedMemory);
 
 #endif
+
+
